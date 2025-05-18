@@ -1,0 +1,2027 @@
+<!DOCTYPE html><html>
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="content">
+<h1>Руководство Bannerlord Twitch Viewer</h1>
+<p>Bannerlord Twitch (BLT) - это мод интеграции Twitch для Mount &amp; Blade II: Bannerlord.<br> В качестве зрителя вы можете использовать награды в виде баллов за канал (если они доступны) и команды чата, чтобы взаимодействовать с игрой во время игры стримера.<br> Основная особенность BLT - это возможность «усыновить» героя в игре, то есть персонаж в игре будет назначен вам с учетом вашего имени Twitch и будет доступен для дальнейшего взаимодействия.<br> Некоторые примеры того, что вы можете делать со своим героем, включают «вызов» своего героя в битвах, в которых принимает участие стример, участие в турнирах зрителей, обновление снаряжения, выбор класса героев.<br> Если вы не знаете, с чего начать, начните с использования погашения баллов канала «Принять героя».</p>
+<div class="toc-container">
+<h2 class="toc-title">Table of Contents</h2>
+<a href="#1"><h1 class="toc-h1">Команды</h1></a>
+<a href="#2"><h1 class="toc-h1">Награды за баллы канала</h1></a>
+<a href="#3"><h1 class="toc-h1">Классы</h1></a>
+<a href="#4"><h2 class="toc-h2">пехота</h2></a>
+<a href="#5"><h2 class="toc-h2">лучник</h2></a>
+<a href="#6"><h2 class="toc-h2">тяжёлый лучник</h2></a>
+<a href="#7"><h2 class="toc-h2">арбалетчик</h2></a>
+<a href="#8"><h2 class="toc-h2">тяжелый арбалетчик</h2></a>
+<a href="#9"><h2 class="toc-h2">кавалерия</h2></a>
+<a href="#10"><h2 class="toc-h2">верблюжья кавалерия</h2></a>
+<a href="#11"><h2 class="toc-h2">конный лучник</h2></a>
+<a href="#12"><h2 class="toc-h2">верблюжий лучник</h2></a>
+<a href="#13"><h2 class="toc-h2">штурмовик</h2></a>
+<a href="#14"><h2 class="toc-h2">берсерк</h2></a>
+<a href="#15"><h2 class="toc-h2">мародер</h2></a>
+<a href="#16"><h1 class="toc-h1">Общая конфигурация</h1></a>
+<a href="#17"><h2 class="toc-h2">Общий</h2></a>
+<a href="#18"><h2 class="toc-h2">Боевой</h2></a>
+<a href="#19"><h2 class="toc-h2">Смерть</h2></a>
+<a href="#20"><h2 class="toc-h2">Награды за убийство</h2></a>
+<a href="#21"><h2 class="toc-h2">Награды в конце битвы</h2></a>
+<a href="#22"><h2 class="toc-h2">XP</h2></a>
+<a href="#23"><h2 class="toc-h2">Серия убийств</h2></a>
+<a href="#24"><h2 class="toc-h2">Достижения</h2></a>
+</div>
+<div class="commands">
+<a name="1"></a>
+<h1>Команды</h1>
+<table>
+<tr>
+<th>Командование</th>
+<th>Описание</th>
+<th>Настройки</th>
+</tr>
+<tr>
+<td>аукцион</td>
+<td>Start an auction on a custom item you own, with a specified reserve price. Other viewers are able to bid upon your item, and the highest bidder will receive it at the end of the auction.<br>Usage is <code>!auction (custom item index) (reserve price)</code>, e.g. <code>!auction 3 50000</code> would start a new auction for your custom item with the index of 3 (as shown by the 'customitems' command), with a reserve price of 50000.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>предложить</td>
+<td>Сделайте ставку на текущий аукцион, если он активен.<br>Использование <code>!предложить (сумма золота)</code>, например <code>!предложить 100000</code>. Если аукцион не проводится или ставка не превышает резервную цену, она будет отклонена.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>ставка</td>
+<td>Используйте это, чтобы делать ставки на турнирные матчи, если они доступны.<br> <code>!ставка (team) (gold)</code> , например <code>!ставка red 10000</code> чтобы поставить 10000 золота на красное. Выигрыши делятся из всего банка в зависимости от относительного размера ставки.<br> Если ставка сделана только на одну команду, ставки будут возвращены.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>класс</td>
+<td>Выбирает новый класс для вашего героя, обновляя имеющееся снаряжение в соответствии с требованиями класса.<br>Используется <code>!класс (название нового класса)</code>, например, <code>!класс лучник</code>.</td>
+<td>
+<div class="value">
+<p><strong class="value">Уровневые затраты</strong>: 1=0⦷, 2=0⦷, 3=0⦷, 4=40000⦷, 5=80000⦷, 5=80000⦷, 6=160000⦷</p>
+</div>
+<p>Бесплатно, если у вас еще нет занятий</p>
+<p>Обновляет снаряжение для соответствия новому классу</p>
+</td>
+</tr>
+<tr>
+<td>discarditem</td>
+<td>Throw away one of your custom items.<br>Usage is <code>!discarditem (custom item index)</code>, e.g. <code>!discarditem 3</code> would discard your custom item with the index 3. The custom item index is shown in the 'customs' command.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>датьпредмет</td>
+<td>Give one of your custom items to another viewer.<br>Usage is <code>!giveitem (custom item index) (viewer)</code>, e.g. <code>!giveitem 3 C4alad0g</code> would give your custom item with the index 3 to the viewer called C4lad0g. The custom item index is shown in the 'customitems' command.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>hero</td>
+<td>Use to adjust hero physical features <br> Usage is <code>!hero (gender) (male/female) </code> <br> Example: !hero gender male</td>
+<td>
+<p class=value><strong>Enabled Commands:</strong> Change Hero Gender</p>
+<p class=value><strong>Gender Change Config: </strong>Price=50000⦷, Only on created heroes?=True</p>
+</td>
+</tr>
+<tr>
+<td>инв</td>
+<td>Shows your heroes equipped loadout and inventory, excluding custom items (do !customItems instead)</td>
+<td>
+<div class="value">
+<p><strong class="value">Показывает</strong>: Золото, Уровень снаряжения, Инвентарь боевого снаряжения</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>kingdom</td>
+<td>Use to manage clan actions <br> Usage is <code>!kingdom (join/rebel/stats) name </code> <br> Example: !kingdom join Aserai or !clan stats</td>
+<td>
+<p class=value><strong>Enabled Commands:</strong> Join, Create, Stats</p>
+<p class=value><strong>Join Config: </strong>Max Clans=, Price=150000⦷, Allow Join Players Kingdom?=False</p>
+<p class=value><strong>Rebel Config: </strong>Price=2500000⦷, Minimum Clan Tier=2</p>
+</td>
+</tr>
+<tr>
+<td>способности</td>
+<td>Показывает ваши доступные способности</td>
+<td>
+<div class="value">
+<p><strong class="value">Показывает</strong>: Силы</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>свита</td>
+<td>Purchases new retinue troops, or upgrades existing ones to the next tier if you have reached the limit. Retinue will appear with you in battle when you summon, earning you money when they make kills. <br> Usage is <code>!retinue (blank or all for auto upgrade/upgrade amount) </code> <br> Example: !retinue 1 or !retinue all</td>
+<td>
+<div class="value">
+<p><strong class="value">Крики</strong>: 5</p>
+</div>
+<div class="value">
+<p><strong class="value">Эффект</strong>: 1=25000⦷, 2=75000⦷, 3=250000⦷, 4=500000⦷, 5=1000000⦷, 5=1000000⦷, 6=5000000⦷</p>
+</div>
+<div class="value">
+<p><strong class="value">Разрешается</strong>: Цели, Основные войска, Элитные войска</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>списоксвиты</td>
+<td>Показывает ваши текущие войска свиты.</td>
+<td>
+<div class="value">
+<p><strong class="value">Показывает</strong>: Список отрядов свиты</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>стат</td>
+<td>Показывает общую информацию о вашем герое, включая клан, золото, местоположение, HP, навыки, атрибуты и свиту.</td>
+<td>
+<div class="value">
+<p><strong class="value">Показывает</strong>: Атрибуты</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>атр</td>
+<td>атрибуты</td>
+<td>
+<p>Укажите имя атрибута (или его часть) при вызове этого</p>
+<div class="value">
+<p><strong class="value">Количество</strong>: 0 к 1</p>
+</div>
+<p>Расходы 150000⦷</p>
+</td>
+</tr>
+<tr>
+<td>бой</td>
+<td>Use this when the streamer enters a battle, to spawn your adopted hero on the enemy side (along with your retinue).</td>
+<td>
+<div class="value">
+<p><strong class="value">Бок</strong>: Сторона стримера</p>
+</div>
+<div class="value">
+<p><strong class="value">Лечит</strong>: 1.0HP в секунду пока вызван</p>
+</div>
+<div class="value">
+<p><strong class="value">Разрешено в</strong>: Полевое сражение, Деревенская битва, Осадный бой, Дружеская миссия, Убежище</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>враг</td>
+<td>Против стримера</td>
+<td>
+<div class="value">
+<p><strong class="value">Бок</strong>: Сторона врага</p>
+</div>
+<div class="value">
+<p><strong class="value">Лечит</strong>: 1.0HP в секунду пока вызван</p>
+</div>
+<div class="value">
+<p><strong class="value">Разрешено в</strong>: Полевое сражение, Деревенская битва, Осадный бой, Дружеская миссия, Убежище</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>голда</td>
+<td>Показать текущее золото вашего героя.</td>
+<td>
+<div class="value">
+<p><strong class="value">Показывает</strong>: Золото</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>дарю100</td>
+<td></td>
+<td>
+</td>
+</tr>
+<tr>
+<td>живи</td>
+<td>Лечит стримера</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>именное</td>
+<td>You can use this to name your custom items.<br>Usage is <code>!nameitem (custom item index) (name)</code>, for example <code>!nameitem 3 Foehammer</code>. The custom item index is shown in the 'customitems' command.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>клан</td>
+<td>Use to manage clan actions <br> Usage is <code>!clan (join/create/lead/rename/stats) name </code> <br> Example: !clan join Banu Tammar or !clan stats</td>
+<td>
+<p class=value><strong>Enabled Commands:</strong> Join, Create, Lead, Rename, Stats</p>
+<p class=value><strong>Join Config: </strong>Max Heroes=50, Price=150000⦷, Allow Join Players Clan?=True</p>
+<p class=value><strong>Create Config: </strong>Price=2500000⦷</p>
+<p class=value><strong>Lead Config: </strong>Price=1000000⦷, Challenge Heroes?=True</p>
+<p class=value><strong>Rename Config: </strong>Price=1000000⦷</p>
+</td>
+</tr>
+<tr>
+<td>коняМне</td>
+<td>создает коня</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>крафтБроня</td>
+<td></td>
+<td>
+</td>
+</tr>
+<tr>
+<td>крафтПушка</td>
+<td>создает оружие персонажу зрителя</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>ктоя</td>
+<td>Shows the viewers custom item list, which is required so they know what item index to use in the custom item related commands.</td>
+<td>
+<div class="value">
+<p><strong class="value">Показывает</strong>: Золото, Возраст, Клан, Культура, Здоровье, Навыки выше , Атрибуты, Кол-во и средний ранг свиты, Список отрядов свиты, Достижения, Отслеживаемая статистика, Силы</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>мочи</td>
+<td></td>
+<td>
+</td>
+</tr>
+<tr>
+<td>подарок</td>
+<td></td>
+<td>
+</td>
+</tr>
+<tr>
+<td>сменитьПол</td>
+<td>изменения пола героя зрителя</td>
+<td>
+<p class=value><strong>Enabled Commands:</strong> Change Hero Gender</p>
+<p class=value><strong>Gender Change Config: </strong>Price=50000⦷, Only on created heroes?=False</p>
+</td>
+</tr>
+<tr>
+<td>старт</td>
+<td>Adopt a randomly selected Hero</td>
+<td>
+<p class=value>Viewer selects hero by culture</p>
+<p class=value>Недавно созданный странник</p>
+<div class="value">
+<p><strong class="value">Начальный возрастной диапазон</strong>: 18 to 35</p>
+</div>
+<div class="value">
+<p><strong class="value">Стартовое золото</strong>: 50000</p>
+</div>
+<div class="value">
+<p><strong class="value">Наследование</strong>: 10% золота потрачено на снаряжение и свиту, до 2 пользовательских предметов</p>
+</div>
+<div class="value">
+<p><strong class="value">Уровень стартового снаряжения</strong>: 1</p>
+</div>
+<div class="value">
+<p><strong class="value">Стартовый класс</strong>:</p>
+<a href="#лучник">лучник</a>
+</div>
+<div class="value">
+<p><strong class="value">Стартовые навыки</strong>:</p>
+<table class="starting-skills">
+<tr>
+<th>Навык</th>
+<th>Уровень</th>
+</tr>
+<tr>
+<td>Лук</td>
+<td>30 к 50</td>
+</tr>
+<tr>
+<td>Все</td>
+<td>0 к 35</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td>турнир</td>
+<td>Join the tournament queue with your adopted hero. You can see the queue in the overlay. Each tournament can have up to 16 heroes in it, once it is full further heroes will remain in the queue for the next tournament.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>уволить</td>
+<td></td>
+<td>
+<div class="value">
+<p><strong class="value">Only Created Heroes?</strong>: False</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>фокус</td>
+<td></td>
+<td>
+<div class="value">
+<p><strong class="value">Навыки</strong>: Автоматически, в зависимости от класса, снаряжения и имеющихся навыков.</p>
+</div>
+<div class="value">
+<p><strong class="value">Очки внимания</strong>: 0 к 1</p>
+</div>
+<div class="value">
+<p><strong class="value">Расходы</strong>: 50000⦷</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>хил</td>
+<td>Heals your hero over time. Only works in battle, when your hero is summoned.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>экип</td>
+<td>Upgrades your heroes equipment tier, replacing any existing equipment of lower tier, except for custom items. The cost depends on the tier you are trying to upgrade to. <br> Usage is <code>!equip (blank for auto upgrade/tier number) </code> <br> Example: !equip 1 or !equip</td>
+<td>
+<div class="value">
+<p><strong class="value">Уровневые затраты</strong>: 1=25000⦷, 2=75000⦷, 3=250000⦷, 4=750000⦷, 5=2500000⦷, 6=1000000⦷</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>дост</td>
+<td>показывает достижения (настаивается в конфиге)</td>
+<td>
+<div class="value">
+<p><strong class="value">Показывает</strong>: Достижения</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<br>
+<div class="rewards">
+<a name="2"></a>
+<h1>Награды за баллы канала</h1>
+<table>
+<tr>
+<th>Командование</th>
+<th>Описание</th>
+<th>Настройки</th>
+</tr>
+<tr>
+<td>Дайте игроку золото</td>
+<td>Передайте 10,0000 золота персонажу стримеров от своего героя.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>Исцелить героя</td>
+<td>Лечит вашего героя в течение времени. Работает только в бою, когда ваш герой вызван.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>Исцелить стримера</td>
+<td>Лечит персонажа стримера в бою, в течении времени. Не работает на карте кампании.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>New Reward</td>
+<td></td>
+<td>
+</td>
+</tr>
+<tr>
+<td>На пенсию моего героя</td>
+<td>Используйте это, если вы больше не хотите играть текущим героем. Они будут помечены как (вышедшие из употребления), и вы сможете принять новый. Правила наследования применяются к пенсии так же, как и к смерти. Вы ДОЛЖНЫ ввести «да» в командной строке (точно так, как написано, строчными буквами) для завершения вывода на пенсию.</td>
+<td>
+<div class="value">
+<p><strong class="value">Only Created Heroes?</strong>: False</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>Турнир</td>
+<td>Присоединяйтесь к очереди на турнир со своим приемным героем. Вы можете увидеть очередь в оверлее. В каждом турнире может участвовать до 16 героев, после его заполнения другие герои останутся в очереди на следующий турнир.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>Использовать силу класса</td>
+<td>Активируйте силу класса на своем герое, если он у вас есть. Сила будет действовать в течение ограниченного периода времени, показанного в оверлее.</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>враг</td>
+<td>Используйте это, когда стример вступает в бой, чтобы вызвать вашего принятого героя на стороне врага (вместе со своей свитой).</td>
+<td>
+<div class="value">
+<p><strong class="value">Бок</strong>: Сторона врага</p>
+</div>
+<div class="value">
+<p><strong class="value">Лечит</strong>: 1.0HP в секунду пока вызван</p>
+</div>
+<div class="value">
+<p><strong class="value">Разрешено в</strong>: Полевое сражение, Деревенская битва, Осадный бой, Дружеская миссия, Убежище</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>Добавить очки атрибутов</td>
+<td></td>
+<td>
+<p>Случайный атрибут</p>
+<div class="value">
+<p><strong class="value">Количество</strong>: 1</p>
+</div>
+<p>Расходы 100000⦷</p>
+</td>
+</tr>
+<tr>
+<td>Добавить очки фокуса</td>
+<td></td>
+<td>
+<div class="value">
+<p><strong class="value">Навыки</strong>: Автоматически, в зависимости от класса, снаряжения и имеющихся навыков.</p>
+</div>
+<div class="value">
+<p><strong class="value">Очки внимания</strong>: 0</p>
+</div>
+<div class="value">
+<p><strong class="value">Расходы</strong>: 100000⦷</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>КрафтБрони</td>
+<td>создает броню персонажу зрителя</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>КрафтОружия</td>
+<td>создает оружие персонажу зрителя</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>одеть чара</td>
+<td></td>
+<td>
+<div class="value">
+<p><strong class="value">Уровневые затраты</strong>: 1=25000⦷, 2=50000⦷, 3=250000⦷, 4=1000000⦷, 5=5000000⦷, 6=20000000⦷</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>Атрибуты</td>
+<td>добавляет атрибуты игроку</td>
+<td>
+<p>Случайный атрибут</p>
+<div class="value">
+<p><strong class="value">Количество</strong>: 0 к 1</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<br>
+<div class="global-configs">
+<div class="class-config">
+<a name="3"></a>
+<h1>Классы</h1>
+<a name="пехота">
+<a name="4"></a>
+<h2>пехота</h2>
+</a>
+<p>Basic foot soldier, the core around which every army is built.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_1.png" alt="пехота Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_2.png" alt="пехота Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_3.png" alt="пехота Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_4.png" alt="пехота Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_5.png" alt="пехота Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_6.png" alt="пехота Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Дальний бой</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Одноручный меч</p>
+<img class="equip-img" src="blt_img_7.png" alt="Железная спата">
+</td>
+<td>
+<p>Щит</p>
+<img class="equip-img" src="blt_img_8.png" alt="Iron Decorated Buckler">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Здоровый</p>
+<p>Здоровый I: 125% HP</p>
+<p>Атлетик I: Атлетичность: +25</p>
+<p>Здоровый II: 150% HP</p>
+<p>Атлетик II: Атлетичность: +50</p>
+<p>Здоровый III: 200% HP</p>
+<p>Атлетик III: Атлетичность: +100</p>
+<p>Раздавить I: 15% Неблокируемого / 15% Раскол Щита</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Огненный меч</p>
+<p>[Огненный Клинок I: Множитель скорости поворота: 115% Рукопашный бой: +25] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Игнорировать броню I: Игнорировать 15% брони] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Огненный клинок II: Множитель скорости поворота: 130% Рукопашный бой: +50] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Игнорировать броню II: Игнорировать 30% брони] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Огненный клинок III: Множитель скорости поворота: 150% Рукопашный бой: +100] требует УРОВЕНЬ КЛАССА 3</p>
+<p>[Игнорировать броню III: Игнорировать 60% брони] требует УРОВЕНЬ КЛАССА 3</p>
+<p>[Стойкость II: 40% Стойкость] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="лучник">
+<a name="5"></a>
+<h2>лучник</h2>
+</a>
+<p>Ranged troop, quick on their feet, can use explosive arrows.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_9.png" alt="лучник Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_10.png" alt="лучник Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_11.png" alt="лучник Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_12.png" alt="лучник Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_13.png" alt="лучник Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_14.png" alt="лучник Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Дальний бой</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Лук</p>
+<img class="equip-img" src="blt_img_15.png" alt="Простой короткий лук">
+</td>
+<td>
+<p>Стрелкы</p>
+<img class="equip-img" src="blt_img_16.png" alt="Бронебойные стрелы">
+</td>
+<td>
+<p>Стрелкы</p>
+<img class="equip-img" src="blt_img_17.png" alt="Бронебойные стрелы">
+</td>
+<td>
+<p>Одноручный топор</p>
+<img class="equip-img" src="blt_img_18.png" alt="Топорик">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Флотские ноги</p>
+<p>Флотские ноги I: Множитель максимальной скорости: 110% </p>
+<p>Рейнджер I: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 125% </p>
+<p>Флотские ноги II: Множитель максимальной скорости: 125% </p>
+<p>Рейнджер II: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 150% </p>
+<p>Флотские ноги III: Множитель максимальной скорости: 150% </p>
+<p>Рейнджер III: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 200% </p>
+<p>Хрупкий I: 50% HP</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Взрывные стрелы</p>
+<p>[Взрывоопасные снаряды 1: 25.0% урона / AoE: 50урона на 3м от Дальний бой] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Взрывоопасные снаряды 2: 50.0% урона / AoE: 75урона на 4м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Взрывоопасные снаряды 3: 50.0% урона / AoE: 100урона на 5м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 3</p>
+<p>[Взрывоопасные снаряды 4: 50.0% урона / AoE: 100урона на 6м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 6+Битвы >= 100 [класс: (Class, (текущий))</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="тяжёлый лучник">
+<a name="6"></a>
+<h2>тяжёлый лучник</h2>
+</a>
+<p>Ranged troop, quick on their feet, can use explosive arrows.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_19.png" alt="тяжёлый лучник Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_20.png" alt="тяжёлый лучник Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_21.png" alt="тяжёлый лучник Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_22.png" alt="тяжёлый лучник Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_23.png" alt="тяжёлый лучник Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_24.png" alt="тяжёлый лучник Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Дальний бой</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Лук</p>
+<img class="equip-img" src="blt_img_25.png" alt="Простой короткий лук">
+</td>
+<td>
+<p>Стрелкы</p>
+<img class="equip-img" src="blt_img_26.png" alt="Бронебойные стрелы">
+</td>
+<td>
+<p>Стрелкы</p>
+<img class="equip-img" src="blt_img_27.png" alt="Бронебойные стрелы">
+</td>
+<td>
+<p>Двуручный топор</p>
+<img class="equip-img" src="blt_img_28.png" alt="Простой спарр">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Здоровый</p>
+<p>Здоровый I: 125% HP</p>
+<p>Здоровый II: 150% HP</p>
+<p>Здоровый III: 200% HP</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Взрывные стрелы</p>
+<p>[Взрывоопасные снаряды 1: 25.0% урона / AoE: 50урона на 3м от Дальний бой] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Взрывоопасные снаряды 2: 50.0% урона / AoE: 75урона на 4м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Взрывоопасные снаряды 3: 50.0% урона / AoE: 100урона на 5м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="арбалетчик">
+<a name="7"></a>
+<h2>арбалетчик</h2>
+</a>
+<p>Ranged troop that specializes in crossbow, tougher but slower than the archer. Can use exposive bolts</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_29.png" alt="арбалетчик Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_30.png" alt="арбалетчик Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_31.png" alt="арбалетчик Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_32.png" alt="арбалетчик Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_33.png" alt="арбалетчик Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_34.png" alt="арбалетчик Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Дальний бой</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Арбалет</p>
+<img class="equip-img" src="blt_img_35.png" alt="Sling">
+</td>
+<td>
+<p>Болты</p>
+<img class="equip-img" src="blt_img_36.png" alt="Stone Sling Bullets">
+</td>
+<td>
+<p>Болты</p>
+<img class="equip-img" src="blt_img_37.png" alt="Stone Sling Bullets">
+</td>
+<td>
+<p>Одноручный меч</p>
+<img class="equip-img" src="blt_img_38.png" alt="Железная спата">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Самоисцеление</p>
+<p>Вампир I: Поглощение 10% нанесенного урона в виде HP.</p>
+<p>Рейнджер I: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 125% </p>
+<p>Вампир II: Поглощение 25% нанесенного урона в виде HP.</p>
+<p>Рейнджер II: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 150% </p>
+<p>Вампир II: Поглощение 25% нанесенного урона в виде HP.</p>
+<p>Рейнджер III: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 200% </p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Тяжелые болты</p>
+<p>[Тяжелые снаряды I: Добавить: 10% Сбить, 10% Оттолкнуть верховое, 10% Спешиться / 25% Неблокируемого / 25% Прорезания от Дальний бой] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Тяжелые снаряды II: Добавить: 25% Сбить, 25% Оттолкнуть верховое, 25% Спешиться / 50% Неблокируемого / 50% Прорезания / AoE: 25урона на 1м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Тяжелые снаряды III: Добавить: 50% Сбить, 50% Оттолкнуть верховое, 50% Спешиться / 90% Неблокируемого / 90% Прорезания / AoE: 40урона на 1.5м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="тяжелый арбалетчик">
+<a name="8"></a>
+<h2>тяжелый арбалетчик</h2>
+</a>
+<p>Ranged troop that specializes in crossbow, tougher but slower than the archer. Can use exposive bolts</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_39.png" alt="тяжелый арбалетчик Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_40.png" alt="тяжелый арбалетчик Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_41.png" alt="тяжелый арбалетчик Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_42.png" alt="тяжелый арбалетчик Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_43.png" alt="тяжелый арбалетчик Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_44.png" alt="тяжелый арбалетчик Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Дальний бой</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Арбалет</p>
+<img class="equip-img" src="blt_img_45.png" alt="Sling">
+</td>
+<td>
+<p>Болты</p>
+<img class="equip-img" src="blt_img_46.png" alt="Stone Sling Bullets">
+</td>
+<td>
+<p>Болты</p>
+<img class="equip-img" src="blt_img_47.png" alt="Stone Sling Bullets">
+</td>
+<td>
+<p>Двуручный меч</p>
+<img class="equip-img" src="blt_img_48.png" alt="Широкий двуручный меч с широкими желобками">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Здоровый</p>
+<p>Здоровый I: 125% HP</p>
+<p>Здоровый II: 150% HP</p>
+<p>Здоровый III: 200% HP</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Взрывные болты</p>
+<p>[Тяжелые снаряды I: Добавить: 10% Сбить, 10% Оттолкнуть верховое, 10% Спешиться / 25% Неблокируемого / 25% Прорезания от Дальний бой] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Тяжелые снаряды II: Добавить: 25% Сбить, 25% Оттолкнуть верховое, 25% Спешиться / 50% Неблокируемого / 50% Прорезания / AoE: 25урона на 1м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Тяжелые снаряды III: Добавить: 50% Сбить, 50% Оттолкнуть верховое, 50% Спешиться / 90% Неблокируемого / 90% Прорезания / AoE: 40урона на 1.5м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="кавалерия">
+<a name="9"></a>
+<h2>кавалерия</h2>
+</a>
+<p>Mounted troop with a strong horse, capable of doing extra charge damage.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_49.png" alt="кавалерия Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_50.png" alt="кавалерия Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_51.png" alt="кавалерия Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_52.png" alt="кавалерия Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_53.png" alt="кавалерия Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_54.png" alt="кавалерия Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Кавалерия</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Одноручное копье</p>
+<img class="equip-img" src="blt_img_55.png" alt="Вилы">
+</td>
+<td>
+<p>Щит</p>
+<img class="equip-img" src="blt_img_56.png" alt="Iron Decorated Buckler">
+</td>
+<td>
+<p>Одноручный меч</p>
+<img class="equip-img" src="blt_img_57.png" alt="Железная спата">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Верховое</td>
+<td>
+<p>Лошадь</p>
+<img class="equip-img" src="blt_img_58.png" alt="Ездовая лошадь">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Хорошая лошадь</p>
+<p>Лучший наездник I: Скорость передвижения: 110%  Продолжительность достижения максимальной скорости: 90%  Броня Торса: +20 (на верховом)</p>
+<p>Заряд I: Маунт-рывок: урон: 150%  Верховая маневренность: 125%  (на верховом)</p>
+<p>Лучший наездник II: Скорость передвижения: 125%  Продолжительность достижения максимальной скорости: 75%  Броня Торса: +40 (на верховом)</p>
+<p>Заряд II: Маунт-рывок: урон: 250%  Верховая маневренность: 150%  (на верховом)</p>
+<p>Лучший наездник III: Скорость передвижения: 150%  Продолжительность достижения максимальной скорости: 50%  Броня Торса: +80 (на верховом)</p>
+<p>Заряд III: Маунт-рывок: урон: 500%  Верховая маневренность: 200%  (на верховом)</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Топтать</p>
+<p>[Столкновение AoE I: AoE: 25урона на 2м от Столкновение] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Столкновение AoE II: AoE: 50урона на 2м от Столкновение] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Столкновение AoE III: AoE: 100урона на 2м от Столкновение] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="верблюжья кавалерия">
+<a name="10"></a>
+<h2>верблюжья кавалерия</h2>
+</a>
+<p>Mounted troop with a strong horse, capable of doing extra charge damage.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_59.png" alt="верблюжья кавалерия Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_60.png" alt="верблюжья кавалерия Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_61.png" alt="верблюжья кавалерия Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_62.png" alt="верблюжья кавалерия Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_63.png" alt="верблюжья кавалерия Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_64.png" alt="верблюжья кавалерия Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Кавалерия</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Одноручное копье</p>
+<img class="equip-img" src="blt_img_65.png" alt="Вилы">
+</td>
+<td>
+<p>Щит</p>
+<img class="equip-img" src="blt_img_66.png" alt="Iron Decorated Buckler">
+</td>
+<td>
+<p>Одноручная булава</p>
+<img class="equip-img" src="blt_img_67.png" alt="Шипастая дубина">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Верховое</td>
+<td>
+<p>Верблюд</p>
+<img class="equip-img" src="blt_img_68.png" alt="Боевой верблюд">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Хороший верблюд</p>
+<p>Лучший наездник I: Скорость передвижения: 110%  Продолжительность достижения максимальной скорости: 90%  Броня Торса: +20 (на верховом)</p>
+<p>Заряд I: Маунт-рывок: урон: 150%  Верховая маневренность: 125%  (на верховом)</p>
+<p>Лучший наездник II: Скорость передвижения: 125%  Продолжительность достижения максимальной скорости: 75%  Броня Торса: +40 (на верховом)</p>
+<p>Заряд II: Маунт-рывок: урон: 250%  Верховая маневренность: 150%  (на верховом)</p>
+<p>Лучший наездник III: Скорость передвижения: 150%  Продолжительность достижения максимальной скорости: 50%  Броня Торса: +80 (на верховом)</p>
+<p>Заряд III: Маунт-рывок: урон: 500%  Верховая маневренность: 200%  (на верховом)</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Топтать</p>
+<p>[Столкновение AoE I: AoE: 25урона на 2м от Столкновение] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Столкновение AoE II: AoE: 50урона на 2м от Столкновение] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Столкновение AoE III: AoE: 100урона на 2м от Столкновение] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="конный лучник">
+<a name="11"></a>
+<h2>конный лучник</h2>
+</a>
+<p>Mounted ranged unit, with a good horse, that can use exposive arrows.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_69.png" alt="конный лучник Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_70.png" alt="конный лучник Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_71.png" alt="конный лучник Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_72.png" alt="конный лучник Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_73.png" alt="конный лучник Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_74.png" alt="конный лучник Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Конный лучник</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Лук</p>
+<img class="equip-img" src="blt_img_75.png" alt="Простой короткий лук">
+</td>
+<td>
+<p>Стрелкы</p>
+<img class="equip-img" src="blt_img_76.png" alt="Бронебойные стрелы">
+</td>
+<td>
+<p>Стрелкы</p>
+<img class="equip-img" src="blt_img_77.png" alt="Бронебойные стрелы">
+</td>
+<td>
+<p>Одноручный меч</p>
+<img class="equip-img" src="blt_img_78.png" alt="Железная спата">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Верховое</td>
+<td>
+<p>Лошадь</p>
+<img class="equip-img" src="blt_img_79.png" alt="Ездовая лошадь">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Верховая стрельба из лукаа</p>
+<p>Рейнджер I: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 125% </p>
+<p>Лучший наездник I: Скорость передвижения: 110%  Продолжительность достижения максимальной скорости: 90%  Броня Торса: +20 (на верховом)</p>
+<p>Рейнджер II: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 150% </p>
+<p>Лучший наездник II: Скорость передвижения: 125%  Продолжительность достижения максимальной скорости: 75%  Броня Торса: +40 (на верховом)</p>
+<p>Рейнджер III: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 200% </p>
+<p>Лучший наездник III: Скорость передвижения: 150%  Продолжительность достижения максимальной скорости: 50%  Броня Торса: +80 (на верховом)</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Взрывные стрелы</p>
+<p>[Взрывоопасные снаряды 1: 25.0% урона / AoE: 50урона на 3м от Дальний бой] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Взрывоопасные снаряды 2: 50.0% урона / AoE: 75урона на 4м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Взрывоопасные снаряды 3: 50.0% урона / AoE: 100урона на 5м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="верблюжий лучник">
+<a name="12"></a>
+<h2>верблюжий лучник</h2>
+</a>
+<p>Mounted ranged unit on a good camel, wielding a glaive. Can use exposive arrows.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_80.png" alt="верблюжий лучник Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_81.png" alt="верблюжий лучник Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_82.png" alt="верблюжий лучник Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_83.png" alt="верблюжий лучник Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_84.png" alt="верблюжий лучник Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_85.png" alt="верблюжий лучник Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Конный лучник</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Лук</p>
+<img class="equip-img" src="blt_img_86.png" alt="Простой короткий лук">
+</td>
+<td>
+<p>Стрелкы</p>
+<img class="equip-img" src="blt_img_87.png" alt="Бронебойные стрелы">
+</td>
+<td>
+<p>Стрелкы</p>
+<img class="equip-img" src="blt_img_88.png" alt="Бронебойные стрелы">
+</td>
+<td>
+<p>Двуручная древковое</p>
+<img class="equip-img" src="blt_img_89.png" alt="Коса">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Верховое</td>
+<td>
+<p>Верблюд</p>
+<img class="equip-img" src="blt_img_90.png" alt="Боевой верблюд">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Верховая стрельба из лука</p>
+<p>Рейнджер I: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 125% </p>
+<p>Лучший наездник I: Скорость передвижения: 110%  Продолжительность достижения максимальной скорости: 90%  Броня Торса: +20 (на верховом)</p>
+<p>Лучший наездник II: Скорость передвижения: 125%  Продолжительность достижения максимальной скорости: 75%  Броня Торса: +40 (на верховом)</p>
+<p>Рейнджер II: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 150% </p>
+<p>Лучший наездник III: Скорость передвижения: 150%  Продолжительность достижения максимальной скорости: 50%  Броня Торса: +80 (на верховом)</p>
+<p>Рейнджер III: Частота выстрелов AI: 200%  Фактор ожидания перед выстрелом ИИ: 50% Дальний бой: 200% </p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Тяжелые стрелы</p>
+<p>[Тяжелые снаряды I: Добавить: 10% Сбить, 10% Оттолкнуть верховое, 10% Спешиться / 25% Неблокируемого / 25% Прорезания от Дальний бой] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Тяжелые снаряды II: Добавить: 25% Сбить, 25% Оттолкнуть верховое, 25% Спешиться / 50% Неблокируемого / 50% Прорезания / AoE: 25урона на 1м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Тяжелые снаряды III: Добавить: 50% Сбить, 50% Оттолкнуть верховое, 50% Спешиться / 90% Неблокируемого / 90% Прорезания / AoE: 40урона на 1.5м от  от Дальний бой] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="штурмовик">
+<a name="13"></a>
+<h2>штурмовик</h2>
+</a>
+<p>Foot soldier that can engage at range using javelins. Able to reflect a portion of incoming damage.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_91.png" alt="штурмовик Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_92.png" alt="штурмовик Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_93.png" alt="штурмовик Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_94.png" alt="штурмовик Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_95.png" alt="штурмовик Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_96.png" alt="штурмовик Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Застрельщик</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Двуручный меч</p>
+<img class="equip-img" src="blt_img_97.png" alt="Широкий двуручный меч с широкими желобками">
+</td>
+<td>
+<p>Метание копья</p>
+<img class="equip-img" src="blt_img_98.png" alt="Простой дротик">
+</td>
+<td>
+<p>Метание копья</p>
+<img class="equip-img" src="blt_img_99.png" alt="Простой дротик">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Возмездие</p>
+<p>Возмездие I: Отражение 10% урона</p>
+<p>Возмездие II: Отражение 25% урона</p>
+<p>Возмездие III: Отражение 50% урона</p>
+<p>Взрывоопасные снаряды 1: 25.0% урона / AoE: 50урона на 3м от Дальний бой</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Прорыв</p>
+<p>[Нокдаун I: Добавить: 15% Сбить] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Раскол щита I: 15% Раскол Щита] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Нокдаун II: Добавить: 30% Сбить] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Раскол щита II: 30% Раскол Щита] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Нокдаун III: Добавить: 50% Сбить] требует УРОВЕНЬ КЛАССА 3</p>
+<p>[Раскол щита III: 60% Раскол Щита] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="берсерк">
+<a name="14"></a>
+<h2>берсерк</h2>
+</a>
+<p>Foot soldier with lower health, that can gain health by doing damage.</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_100.png" alt="берсерк Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_101.png" alt="берсерк Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_102.png" alt="берсерк Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_103.png" alt="берсерк Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_104.png" alt="берсерк Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_105.png" alt="берсерк Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Застрельщик</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Двуручный топор</p>
+<img class="equip-img" src="blt_img_106.png" alt="Простой спарр">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Стеклянная пушка</p>
+<p>Хрупкий I: 50% HP</p>
+<p>Тяжелое попадание I: 125.0% урона</p>
+<p>Хрупкий II: 65% HP</p>
+<p>Тяжелое попадание II: 150.0% урона</p>
+<p>Хрупкий III: 90% HP</p>
+<p>Тяжелое попадание III: 200.0% урона</p>
+<p>Внушительный: Масштаб 120% </p>
+<p>Нокдаун I: Добавить: 15% Сбить</p>
+<p>Вампир II: Поглощение 25% нанесенного урона в виде HP.</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Ярость берсерка</p>
+<p>[Стойкость I: 15% Стойкость] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Прорезать I: 25% Неблокируемого] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Стойкость II: 40% Стойкость] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Прорезать II: 50% Неблокируемого] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Стойкость III: 80% Стойкость] требует УРОВЕНЬ КЛАССА 3</p>
+<p>[Прорезать III: 100% Неблокируемого] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+<a name="мародер">
+<a name="15"></a>
+<h2>мародер</h2>
+</a>
+<p>Подробности</p>
+<table class="hero-class-tiers">
+<tr>
+<th>Уровень 1</th>
+<th>Уровень 2</th>
+<th>Уровень 3</th>
+<th>Уровень 4</th>
+<th>Уровень 5</th>
+<th>Уровень 6</th>
+</tr>
+<tr>
+<td>
+<img src="blt_img_107.png" alt="мародер Tier 1 Example">
+</td>
+<td>
+<img src="blt_img_108.png" alt="мародер Tier 2 Example">
+</td>
+<td>
+<img src="blt_img_109.png" alt="мародер Tier 3 Example">
+</td>
+<td>
+<img src="blt_img_110.png" alt="мародер Tier 4 Example">
+</td>
+<td>
+<img src="blt_img_111.png" alt="мародер Tier 5 Example">
+</td>
+<td>
+<img src="blt_img_112.png" alt="мародер Tier 6 Example">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Формирование</td>
+<td>Застрельщик</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Снаряжение</td>
+<td>
+<p>Камень</p>
+<img class="equip-img" src="blt_img_113.png" alt="Throwing Pots">
+</td>
+<td>
+<p>Камень</p>
+<img class="equip-img" src="blt_img_114.png" alt="Throwing Pots">
+</td>
+<td>
+<p>Камень</p>
+<img class="equip-img" src="blt_img_115.png" alt="Throwing Pots">
+</td>
+<td>
+<p>Камень</p>
+<img class="equip-img" src="blt_img_116.png" alt="Throwing Pots">
+</td>
+</tr>
+</table>
+<table class="hero-class">
+<tr>
+<td>Пассивная сила</td>
+<td>
+<p class=power-title>Гранаты</p>
+<p>Взрывоопасные снаряды 1: 25.0% урона / AoE: 50урона на 3м от Дальний бой</p>
+<p>Взрывоопасные снаряды 2: 50.0% урона / AoE: 75урона на 4м от  от Дальний бой</p>
+<p>Взрывоопасные снаряды 3: 50.0% урона / AoE: 100урона на 5м от  от Дальний бой</p>
+</td>
+</tr>
+<tr>
+<td>Активная сила</td>
+<td>
+<p class=power-title>Возмездие</p>
+<p>[Возмездие I: Отражение 10% урона] требует УРОВЕНЬ КЛАССА 1</p>
+<p>[Возмездие II: Отражение 25% урона] требует УРОВЕНЬ КЛАССА 2</p>
+<p>[Возмездие III: Отражение 50% урона] требует УРОВЕНЬ КЛАССА 3</p>
+</td>
+</tr>
+</table>
+<br>
+</div>
+<div class="common-config">
+<a name="16"></a>
+<h1>Общая конфигурация</h1>
+<a name="17"></a>
+<h2>Общий</h2>
+<table>
+<tr>
+<td>Дополнительное усиление</td>
+<td>
+<p>1</p>
+</td>
+<td>Множитель применяется ко всем вознаграждениям для подписчиков (меньше или равно 1 означает отсутствие повышения). ПРИМЕЧАНИЕ. Это реализовано лишь частично, в настоящее время работает только для команд ботов.</td>
+</tr>
+</table>
+<a name="18"></a>
+<h2>Боевой</h2>
+<table>
+<tr>
+<td>Начни с полным здоровьем</td>
+<td>
+<p>Включено</p>
+</td>
+<td>Всегда ли герой будет начинать с полным здоровьем</td>
+</tr>
+<tr>
+<td>Начальный множитель здоровья</td>
+<td>
+<p>2</p>
+</td>
+<td>Сумма, на которую умножается нормальное начальное здоровье, чтобы дать героям лучшую выносливость по сравнению с другими.</td>
+</tr>
+<tr>
+<td>Множитель здоровья стартовой свиты</td>
+<td>
+<p>2</p>
+</td>
+<td>Сумма, на которую умножается нормальное начальное здоровье свиты, чтобы дать свите лучшую выносливость по сравнению с другими</td>
+</tr>
+<tr>
+<td>Фактор потери морального духа</td>
+<td>
+<p>0.5</p>
+</td>
+<td>Снижает моральный дух при смерти вызванных героев.</td>
+</tr>
+<tr>
+<td>Перезарядка призыва в секундах</td>
+<td>
+<p>0</p>
+</td>
+<td>Минимальное время между вызовами конкретного героя</td>
+</tr>
+<tr>
+<td>Множитель использования перезарядки призыва</td>
+<td>
+<p>0.5</p>
+</td>
+<td>На сколько умножить время восстановления при каждом использовании призыва. например, если время восстановления призыва составляет 20 секунд, а значение UseMultiplier равно 1,1 (по умолчанию), то время восстановления первого призыва составляет 20 секунд, а следующих 24 секунд, 10-го 52 секунды и 20-го 135 секунд. См. Https://www.desmos.com/calculator/muej1o5eg5 для визуализации этого.</td>
+</tr>
+<tr>
+<td>Формирование свиты героев</td>
+<td>
+<p>Включено</p>
+</td>
+<td>Должна ли свита приемных героев появляться в той же формации, что и герой (в противном случае они перейдут в построения по умолчанию)</td>
+</tr>
+</table>
+<a name="19"></a>
+<h2>Смерть</h2>
+<table>
+<tr>
+<td>Разрешить смерть</td>
+<td>
+<p>Отключено</p>
+</td>
+<td>Можно ли умереть усыновленному герою</td>
+</tr>
+<tr>
+<td>Окончательный процент шанса смерти</td>
+<td>
+<p>0.5</p>
+</td>
+<td>Процент окончательного шанса смерти (включая ванильный шанс)</td>
+</tr>
+<tr>
+<td>Применить шанс смерти ко всем героям</td>
+<td>
+<p>Отключено</p>
+</td>
+<td>Применять ли изменения шанса смерти ко всем героям, а не только к приемным.</td>
+</tr>
+<tr>
+<td>Retinue Death Chance Percent</td>
+<td>
+<p>2.5</p>
+</td>
+<td>Retinue death chance percent (this determines the chance that a killing blow will actually kill the retinue, removing them from the adopted hero's retinue list)</td>
+</tr>
+</table>
+<a name="20"></a>
+<h2>Награды за убийство</h2>
+<table>
+<tr>
+<td>Золото за убийство</td>
+<td>
+<p>2500</p>
+</td>
+<td>Золото герой получает за каждое убийство</td>
+</tr>
+<tr>
+<td>XP за убийство</td>
+<td>
+<p>2500</p>
+</td>
+<td>XP, который герой получает за каждое убийство</td>
+</tr>
+<tr>
+<td>XP за убитого</td>
+<td>
+<p>1500</p>
+</td>
+<td>XP, который получает герой за убийство</td>
+</tr>
+<tr>
+<td>Лечение за убийство</td>
+<td>
+<p>20</p>
+</td>
+<td>HP герой получает за каждое убийство</td>
+</tr>
+<tr>
+<td>Золото свиты за убийство</td>
+<td>
+<p>1000</p>
+</td>
+<td>Золото герой получает за каждое убийство, которое получает его свита.</td>
+</tr>
+<tr>
+<td>Лечение свиты за убийство</td>
+<td>
+<p>25</p>
+</td>
+<td>HP получает свита героя за каждое убийство</td>
+</tr>
+<tr>
+<td>Относительное масштабирование уровня</td>
+<td>
+<p>0.5</p>
+</td>
+<td>Насколько масштабировать награду за убийство в зависимости от относительного уровня двух персонажей. Если это 0 (или не установлено), то награды всегда соответствуют указанному, если это больше 0, тогда награды увеличиваются, если убитый юнит выше уровня героя, и уменьшается, если он ниже. При значении 0,5 (рекомендуется) при разнице уровней 10 будет примерно в 2,5 раза больше обычных наград в виде золота, XP и здоровья.</td>
+</tr>
+<tr>
+<td>Ограничение масштабирования уровня</td>
+<td>
+<p>5</p>
+</td>
+<td>Ограничивает максимальный множитель для разницы уровней, по умолчанию - 5, если не указан</td>
+</tr>
+</table>
+<a name="21"></a>
+<h2>Награды в конце битвы</h2>
+<table>
+<tr>
+<td>Выиграйте золото</td>
+<td>
+<p>10000</p>
+</td>
+<td>Золото выиграно, если победит сторона героев</td>
+</tr>
+<tr>
+<td>Win XP</td>
+<td>
+<p>10000</p>
+</td>
+<td>XP, который получает герой, если сторона героя побеждает</td>
+</tr>
+<tr>
+<td>Терять золото</td>
+<td>
+<p>5000</p>
+</td>
+<td>Золото потеряно, если проиграет сторона героев</td>
+</tr>
+<tr>
+<td>Терять XP</td>
+<td>
+<p>0</p>
+</td>
+<td>XP, который получает герой, если сторона героя проигрывает</td>
+</tr>
+<tr>
+<td>Масштабирование сложности на стороне игроков</td>
+<td>
+<p>Включено</p>
+</td>
+<td>Применить масштабирование сложности к игрокам</td>
+</tr>
+<tr>
+<td>Увеличение сложности на стороне врага</td>
+<td>
+<p>Включено</p>
+</td>
+<td>Применить масштабирование сложности на сторону врага</td>
+</tr>
+<tr>
+<td>Масштабирование сложности</td>
+<td>
+<p>1</p>
+</td>
+<td>Масштабирование сложности награды в конце: определяет, насколько битвы с более высокой сложностью увеличивают вышеуказанные награды (от 0 до 1).</td>
+</tr>
+<tr>
+<td>Мин. Масштабирования сложности</td>
+<td>
+<p>0.5</p>
+</td>
+<td>Коэффициент масштабирования минимальной сложности</td>
+</tr>
+<tr>
+<td>Максимальное масштабирование сложности</td>
+<td>
+<p>1.1</p>
+</td>
+<td>Множитель увеличения максимальной сложности</td>
+</tr>
+</table>
+<a name="22"></a>
+<h2>XP</h2>
+<table>
+<tr>
+<td>Использовать Raw XP</td>
+<td>
+<p>Включено</p>
+</td>
+<td>Используйте необработанные значения XP вместо корректировки по фокусу и атрибутам, также игнорируя ограничение навыков. Это позволяет избежать застревания персонажей, когда фокус и атрибуты плохо распределены.</td>
+</tr>
+<tr>
+<td>Ограничение навыка Raw XP</td>
+<td>
+<p>350</p>
+</td>
+<td>Ограничение навыка при использовании Raw XP. Навыки не будут выше этого значения. 330 - это максимальное количество XP ванили.</td>
+</tr>
+</table>
+<a name="23"></a>
+<h2>Серия убийств</h2>
+<table class="kill-streaks">
+<tr>
+<th>Имя</th>
+<th>Требуются убийства</th>
+<th>Награда</th>
+</tr>
+<tr>
+<td>Серия убийств</td>
+<td>5</td>
+<td>
+<p>5000⦷</p>
+<p>500XP</p>
+</td>
+</tr>
+<tr>
+<td>Вошел в раж</td>
+<td>25</td>
+<td>
+<p>25000⦷</p>
+<p>10000XP</p>
+</td>
+</tr>
+<tr>
+<td>Не остановить!</td>
+<td>50</td>
+<td>
+<p>50000⦷</p>
+<p>25000XP</p>
+</td>
+</tr>
+<tr>
+<td>Новая серия убийств</td>
+<td>75</td>
+<td>
+<p>75000⦷</p>
+<p>50000XP</p>
+</td>
+</tr>
+<tr>
+<td>Да ну его, я пошел</td>
+<td>100</td>
+<td>
+<p>100000⦷</p>
+<p>50000XP</p>
+</td>
+</tr>
+<tr>
+<td>Новая серия убийств</td>
+<td>150</td>
+<td>
+<p>1000000⦷</p>
+<p>100000XP</p>
+</td>
+</tr>
+</table>
+<a name="24"></a>
+<h2>Достижения</h2>
+<table class="achievements">
+<tr>
+<th>Имя</th>
+<th>Требования</th>
+<th>Награда</th>
+</tr>
+<tr>
+<td>Верный</td>
+<td>
+<p>Последовательный вызов >= 50</p>
+</td>
+<td>
+<p>50000⦷</p>
+<p>25000XP</p>
+<p>Предмет: Оружие: 100% Пользовательский: 100% {=IvV04W31}{ITEMNAME} of Fealty (1x)</p>
+</td>
+</tr>
+<tr>
+<td>Вместе мы сила</td>
+<td>
+<p>Последовательный вызов >= 75</p>
+</td>
+<td>
+<p>75000⦷</p>
+<p>50000XP</p>
+<p>Предмет: Оружие: 100% Пользовательский: 100% {=IvV04W31}{ITEMNAME} of Fealty (1x)</p>
+</td>
+</tr>
+<tr>
+<td>Гигант арены</td>
+<td>
+<p>УРОВЕНЬ КЛАССА КАК МИНИМУМ 6</p>
+<p>TotalTournament Final Wins (Победы в финале турнира) >= 25 [класс: (Class, (ничего))</p>
+</td>
+<td>
+<p>1000000⦷</p>
+<p>1000000XP</p>
+<p>Предмет: Оружие: 48%, Броня: 48%, Верховое: 5% Уровень 5: 50%, Уровень 6: 33%, Пользовательский: 17% {=W47g8bCB}Reward {ITEMNAME} (1x)</p>
+</td>
+</tr>
+<tr>
+<td>Доверенный</td>
+<td>
+<p>Последовательный вызов >= 20</p>
+</td>
+<td>
+<p>20000⦷</p>
+<p>10000XP</p>
+<p>Предмет: Броня: 100% Уровень 4: 33%, Уровень 5: 33%, Уровень 6: 33%</p>
+</td>
+</tr>
+<tr>
+<td>Мастер арены</td>
+<td>
+<p>УРОВЕНЬ КЛАССА КАК МИНИМУМ 6</p>
+<p>TotalTournament Final Wins (Победы в финале турнира) >= 10 [класс: (Class, (ничего))</p>
+</td>
+<td>
+<p>100000⦷</p>
+<p>100000XP</p>
+</td>
+</tr>
+<tr>
+<td>Мятежный</td>
+<td>
+<p>Последовательные атаки >= 5</p>
+</td>
+<td>
+<p>20000⦷</p>
+<p>Предмет: Броня: 100% Уровень 2: 33%, Уровень 3: 33%, Уровень 4: 33%</p>
+</td>
+</tr>
+<tr>
+<td>Надежный</td>
+<td>
+<p>Последовательный вызов >= 5</p>
+</td>
+<td>
+<p>5000⦷</p>
+<p>5000XP</p>
+</td>
+</tr>
+<tr>
+<td>От души</td>
+<td>
+<p>Последовательный вызов >= 125</p>
+</td>
+<td>
+<p>100000⦷</p>
+<p>75000XP</p>
+<p>Предмет: Оружие: 100% Пользовательский: 100% {=IvV04W31}{ITEMNAME} of Fealty (1x)</p>
+</td>
+</tr>
+<tr>
+<td>Отступник</td>
+<td>
+<p>Последовательные атаки >= 50</p>
+</td>
+<td>
+<p>250000⦷</p>
+<p>50000XP</p>
+<p>Предмет: Оружие: 100% Пользовательский: 100% {=UQtSgnog}Renegades {ITEMNAME} (1x)</p>
+</td>
+</tr>
+<tr>
+<td>Предатель</td>
+<td>
+<p>Последовательные атаки >= 20</p>
+</td>
+<td>
+<p>50000⦷</p>
+<p>Предмет: Броня: 100% Уровень 4: 33%, Уровень 5: 33%, Уровень 6: 33%</p>
+</td>
+</tr>
+<tr>
+<td>Проверенный</td>
+<td>
+<p>Последовательный вызов >= 30</p>
+</td>
+<td>
+<p>30000⦷</p>
+<p>15000XP</p>
+<p>Предмет: Броня: 100% Уровень 4: 33%, Уровень 5: 33%, Уровень 6: 33%</p>
+</td>
+</tr>
+<tr>
+<td>Спасибо Бро!</td>
+<td>
+<p>Последовательный вызов >= 100</p>
+</td>
+<td>
+<p>100000⦷</p>
+<p>50000XP</p>
+<p>Предмет: Оружие: 100% Пользовательский: 100% {=IvV04W31}{ITEMNAME} of Fealty (1x)</p>
+</td>
+</tr>
+<tr>
+<td>Стрим Снайпер</td>
+<td>
+<p>Всего убийств стримеров >= 5</p>
+</td>
+<td>
+<p>5000⦷</p>
+<p>5000XP</p>
+</td>
+</tr>
+<tr>
+<td>Стрим Снайпер</td>
+<td>
+<p>Всего убийств стримеров >= 10</p>
+</td>
+<td>
+<p>10000⦷</p>
+<p>10000XP</p>
+</td>
+</tr>
+<tr>
+<td>Стрим Снайпер</td>
+<td>
+<p>Всего убийств стримеров >= 15</p>
+</td>
+<td>
+<p>25000⦷</p>
+<p>25000XP</p>
+<p>Предмет: Оружие: 100% Пользовательский: 100% {=xI41h8NA}Stream Sniper {ITEMNAME} (1x)</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div></html></body>
